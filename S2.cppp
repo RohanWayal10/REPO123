@@ -1,0 +1,68 @@
+#include <GL/glut.h> // Includes all necessary OpenGL headers
+#include<iostream>
+using namespace std;
+#include <math.h>
+
+
+float round_value(float v) {
+    return floor(v + 0.5);
+}
+
+int X1, Y1, X2, Y2;
+
+void lineDDA() {
+    double dx = (X2 - X1);
+    double dy = (Y2 - Y1);
+    double steps;
+    float xInc, yInc, x = X1, y = Y1;
+
+     steps = (abs(dx) > abs(dy)) ? abs(dx) : abs(dy);
+
+    xInc = dx / (float)steps;
+    yInc = dy / (float)steps;
+
+    glClear(GL_COLOR_BUFFER_BIT); // Clear the buffer
+    glColor3f(1.0, 1.0, 1.0); // Set drawing color to white
+    glBegin(GL_POINTS); // Start drawing points
+
+    glVertex2d(round_value(x), round_value(y)); // Plot the starting point
+
+    
+    for (int k = 0; k < steps; k++) {
+        x += xInc;
+        y += yInc;
+        glVertex2d(round_value(x), round_value(y));
+    }
+
+    glEnd(); // Stop drawing points
+    glFlush(); // Flush the drawing buffer
+}
+
+void Init() {
+    glClearColor(0.0, 0.0, 0.0, 1.0); // Set background color to black
+    glColor3f(1.0, 1.0, 1.0); // Set drawing color to white
+   
+        gluOrtho2D(0, 500, 0, 500);
+}
+
+int main(int argc, char** argv) {
+cout<<"hello";
+
+    // Get input for endpoints from the user
+    cout<<"Enter two end points of the line to be drawn:\n";
+    cout<<"Enter Point 1 (X1, Y1): ";
+    cin>>X1>>Y1;
+    cout<<"Enter Point 2 (X2, Y2): ";
+    cin>> X2>> Y2;
+
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+    glutInitWindowPosition(100, 100);
+    glutInitWindowSize(640, 480);
+    glutCreateWindow("DDA Line Drawing - OpenGL");
+    Init();
+    glutDisplayFunc(lineDDA); // Register the display function
+    glutMainLoop(); // Enter the GLUT event processing loop
+
+   return 0;
+}
